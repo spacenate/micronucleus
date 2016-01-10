@@ -69,7 +69,7 @@
 
 // how many milliseconds should host wait till it sends another erase or write?
 // needs to be above 4.5 (and a whole integer) as avr freezes for 4.5ms
-#define MICRONUCLEUS_WRITE_SLEEP 5
+#define MICRONUCLEUS_WRITE_SLEEP 7
 
 
 /* ---------------------- feature / code size options ---------------------- */
@@ -162,7 +162,7 @@
  */
 
 #define AUTO_EXIT_NO_USB_MS    0
-#define AUTO_EXIT_MS           6000
+#define AUTO_EXIT_MS           2500
 
  /*
  *  Defines the setting of the RC-oscillator calibration after quitting the bootloader. (OSCCAL)
@@ -206,7 +206,7 @@
  *
  */ 
 
-#define LED_MODE    NONE
+#define LED_MODE    ACTIVE_LOW 
 
 #define LED_DDR     DDRB
 #define LED_PORT    PORTB
