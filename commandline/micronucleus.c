@@ -28,6 +28,7 @@ Created: September 2012
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <sys/time.h>
 #include "micronucleus_lib.h"
 #include "littleWire_util.h"
 
@@ -58,6 +59,7 @@ static int use_ansi = 0; // output ansi control character stuff
 static int erase_only = 0; // only erase, dont't write file
 static int fast_mode = 0; // normal mode adds 2ms to page writing times and waits longer for connect.
 static int timeout = 0;
+static int debug = 0; // print timestamps for each 
 /*****************************************************************************/
 
 /******************************************************************************
@@ -75,7 +77,7 @@ int main(int argc, char **argv) {
   #if defined(WIN)
   char* usage = "usage: micronucleus [--help] [--run] [--dump-progress] [--fast-mode] [--type intel-hex|raw] [--timeout integer] [--erase-only] filename";
   #else
-  char* usage = "usage: micronucleus [--help] [--run] [--dump-progress] [--fast-mode] [--type intel-hex|raw] [--timeout integer] [--erase-only] filename [--no-ansi]";
+  char* usage = "usage: micronucleus [--help] [--run] [--dump-progress] [--fast-mode] [--type intel-hex|raw] [--timeout integer] [--erase-only] filename [--no-ansi] [--debug]";
   #endif 
   progress_step = 0;
   progress_total_steps = 5; // steps: waiting, connecting, parsing, erasing, writing, (running)?
@@ -140,6 +142,9 @@ int main(int argc, char **argv) {
         printf("Did not understand --timeout value\n");
         return EXIT_FAILURE;
       }
+    } else if (strcmp(argv[arg_pointer], "--debug") == 0) {
+        dump_progress = 1;
+        debug = 1;
     } else {
       file = argv[arg_pointer];
     }
@@ -153,13 +158,16 @@ int main(int argc, char **argv) {
   }
 
   setProgressData("waiting", 1);
-  if (dump_progress) printProgress(0.5);
+  if (dump_progress) printProgress(0.0);
   printf("> Please plug in the device ... \n");
   printf("> Press CTRL+C to terminate the program.\n");
 
 
   time_t start_time, current_time;
   time(&start_time);
+  char buff[4];
+  struct timeval millis_time;
+  int millis, seconds;
 
   while (my_device == NULL) {
     delay(100);
@@ -168,6 +176,12 @@ int main(int argc, char **argv) {
     time(&current_time);
     if (timeout && start_time + timeout < current_time) {
       break;
+    }
+    if (debug) {
+        gettimeofday(&millis_time, NULL);
+        millis = millis_time.tv_usec / 1000;
+        seconds = (int)current_time - start_time;
+        printProgress(seconds + ((float)millis_time.tv_usec/1000000));
     }
   }
 
