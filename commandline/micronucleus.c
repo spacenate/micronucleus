@@ -165,7 +165,6 @@ int main(int argc, char **argv) {
 
   time_t start_time, current_time;
   time(&start_time);
-  char buff[4];
   struct timeval millis_time;
   int millis, seconds;
 
