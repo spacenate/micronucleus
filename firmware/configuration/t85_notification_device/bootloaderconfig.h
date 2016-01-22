@@ -4,14 +4,14 @@
  * according to the hardware.
  *
  * Controller type: ATtiny 85 - 16.5 MHz
- * Configuration:   Default configuration
- *       USB D- :   PB3
- *       USB D+ :   PB4
+ * Configuration:   Alternate pins to free up 3 PWM channels
+ *       USB D- :   PB2
+ *       USB D+ :   PB3
  *       Entry  :   Always
- *       LED    :   None
+ *       LED    :   PB1 ACTIVE HIGH
  *       OSCCAL :   Stays at 16 MHz
  * Note: Uses 16.5 MHz V-USB implementation with PLL
- * Last Change:     Mar 16,2014
+ * Last Change:     Jan 21, 2016
  *
  * License: GNU GPL v2 (see License.txt
  */
@@ -206,7 +206,7 @@
  *
  */
 
-#define LED_MODE    ACTIVE_LOW
+#define LED_MODE    ACTIVE_HIGH
 
 #define LED_DDR     DDRB
 #define LED_PORT    PORTB
